@@ -113,6 +113,80 @@
         }
       }
     },
+    "debuggers": [
+      {
+        "type": "java",
+        "label": "Java Debug",
+        "startSessionCommand": "java.debug.startSession",
+        "enableBreakpointsFor": {
+          "languageIds": [
+            "java"
+          ]
+        },
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "cwd",
+              "startupClass"
+            ],
+            "properties": {
+              "cwd": {
+                "type": "string",
+                "description": "Current working directory (Defaults to workspace root directory).",
+                "default": "${workspaceRoot}"
+              },
+              "startupClass": {
+                "type": "string",
+                "description": "startup class (Should be full qualified name e.g. org.eclipse.xxx.MainClass)",
+                "default": ""
+              },
+              "classPath": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "description": "The classpath to be passed to jvm launcher."
+              },
+              "sourcePath": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "description": "The source folders of the project."
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": true
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "description": "Options to be passed to the java executable (java)."
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "java",
+            "name": "Java Debug",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "stopOnEntry": true,
+            "startupClass": "",
+            "classPath": ["${workspaceRoot}"],
+            "sourcePath": ["${workspaceRoot}"],
+            "options": []
+          }
+        ]
+      }
+    ],
     "commands": [
       {
         "command": "java.projectConfiguration.update",

@@ -79,6 +79,7 @@ function prepareParams(requirements, javaConfiguration, workspacePath) {
 	if (DEBUG) {
 		params.push('-Dlog.protocol=true');
 		params.push('-Dlog.level=ALL');
+		params.push('-Djdt.ls.debug=true');
 	}
 
 	let vmargs = javaConfiguration.get('jdt.ls.vmargs', '');

@@ -2,11 +2,13 @@
 'use strict';
 
 import * as path from 'path';
+import * as vscode from "vscode";
+
 import { workspace, ExtensionContext, window, StatusBarAlignment, commands, ViewColumn, Uri, CancellationToken, TextDocumentContentProvider, TextEditor, WorkspaceConfiguration, languages, IndentAction, ProgressLocation, Progress } from 'vscode';
 import { LanguageClient, LanguageClientOptions, Position as LSPosition, Location as LSLocation } from 'vscode-languageclient';
 import { runServer, awaitServerConnection } from './javaServerStarter';
 import { Commands } from './commands';
-import { StatusNotification, ClassFileContentsRequest, ProjectConfigurationUpdateRequest, MessageType, ActionableNotification, FeatureStatus, ActionableMessage } from './protocol';
+import { StatusNotification, ClassFileContentsRequest, ProjectConfigurationUpdateRequest, MessageType, ActionableNotification, FeatureStatus, ActionableMessage, DebugSessionRequest } from './protocol';
 
 var os = require('os');
 let oldConfig;
@@ -95,6 +97,18 @@ export function activate(context: ExtensionContext) {
 			// Create the language client and start the client.
 			let languageClient = new LanguageClient('java', 'Language Support for Java', serverOptions, clientOptions);
 			languageClient.onReady().then(() => {
+				commands.registerCommand(Commands.START_DEBUG_SESSION, async (config) => {
+					if (!config.startupClass) {
+						vscode.window.showErrorMessage('Please specify startupClass on launch.json firstly.');
+					} else {
+						const port = await languageClient.sendRequest(DebugSessionRequest.type, "vscode.java.debugsession");
+						if (port) {
+							config.debugServer = port;
+							vscode.commands.executeCommand('vscode.startDebug', config);
+						}
+					}
+				});
+
 				languageClient.onNotification(StatusNotification.type, (report) => {
 					switch (report.type) {
 						case 'Started':

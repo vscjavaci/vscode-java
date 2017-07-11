@@ -70,3 +70,7 @@ export namespace ProjectConfigurationUpdateRequest {
 export namespace ActionableNotification {
     export const type = new NotificationType<ActionableMessage, void>('language/actionableNotification');
 }
+
+export namespace DebugSessionRequest {
+    export const type = new RequestType<string, string, void, void>('java/startDebugSession');
+}

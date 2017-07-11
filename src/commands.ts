@@ -58,4 +58,9 @@ export namespace Commands {
 	 * Open Java Language Server Log file
 	 */
 	export const OPEN_SERVER_LOG = 'java.open.serverLog';
+
+    /**
+     * Start Java Debug Session
+     */
+    export const START_DEBUG_SESSION = 'java.debug.startSession';
 }
