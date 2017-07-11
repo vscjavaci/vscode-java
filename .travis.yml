@@ -22,9 +22,10 @@ install:
 - tar -xvzf jdt-language-server-latest.tar.gz -C ./server
 - rm jdt-language-server-latest.tar.gz
 - npm install
-- npm run vscode:prepublish
+- npm install -g gulp
 - npm install -g vsce
-- vsce package
 
 script:
+- gulp tslint
+- vsce package
 - npm test --silent
