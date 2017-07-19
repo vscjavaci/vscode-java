@@ -97,18 +97,6 @@ export function activate(context: ExtensionContext) {
 			// Create the language client and start the client.
 			let languageClient = new LanguageClient('java', 'Language Support for Java', serverOptions, clientOptions);
 			languageClient.onReady().then(() => {
-				commands.registerCommand(Commands.START_DEBUG_SESSION, async (config) => {
-					if (!config.startupClass) {
-						vscode.window.showErrorMessage('Please specify startupClass on launch.json firstly.');
-					} else {
-						const port = await languageClient.sendRequest(DebugSessionRequest.type, "vscode.java.debugsession");
-						if (port) {
-							config.debugServer = port;
-							vscode.commands.executeCommand('vscode.startDebug', config);
-						}
-					}
-				});
-
 				languageClient.onNotification(StatusNotification.type, (report) => {
 					switch (report.type) {
 						case 'Started':
@@ -116,6 +104,17 @@ export function activate(context: ExtensionContext) {
 							p.report({ message: 'Finished' });
 							lastStatus = item.text;
 							resolve();
+							commands.registerCommand(Commands.START_DEBUG_SESSION, async (config) => {
+								if (!config.startupClass) {
+									vscode.window.showErrorMessage('Please specify startupClass on launch.json firstly.');
+								} else {
+									const port = await languageClient.sendRequest(DebugSessionRequest.type, "vscode.java.debugsession");
+									if (port) {
+										config.debugServer = port;
+										vscode.commands.executeCommand('vscode.startDebug', config);
+									}
+								}
+							});
 							break;
 						case 'Error':
 							item.text = '$(thumbsdown)';
