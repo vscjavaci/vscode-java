@@ -5,7 +5,7 @@
   "author": "Red Hat",
   "icon": "icons/icon128.png",
   "license": "EPL-1.0",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "publisher": "redhat",
   "bugs": "https://github.com/redhat-developer/vscode-java/issues",
   "preview": true,
@@ -106,10 +106,25 @@
           "default": true,
           "description": "Enable/disable the references code lens."
         },
+        "java.signatureHelp.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable the signature help."
+        },
         "java.configuration.maven.userSettings": {
           "type": "string",
           "default": null,
           "description": "Absolute path to Maven's settings.xml"
+        },
+        "java.format.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable default Java formatter"
+        },
+        "java.import.exclusions": {
+          "type": "array",
+          "description": "Configure glob patterns for excluding folders",
+          "default": "['**/node_modules', '**/.metadata']"
         }
       }
     },

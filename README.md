@@ -62,6 +62,7 @@ The following settings are supported:
 * `java.errors.incompleteClasspath.severity` : Specifies the severity of the message when the classpath is incomplete for a Java file. Supported values are `ignore`, `info`, `warning`, `error`.
 * `java.trace.server` : Traces the communication between VS Code and the Java language server.
 * `java.referencesCodeLens.enabled` : Enable/disable the references code lens.
+* `java.signatureHelp.enabled` : Enable/disable the signature help.
 * `java.configuration.maven.userSettings` : Absolute path to Maven's settings.xml.
 
 
@@ -83,7 +84,7 @@ This is an open source project open to anyone. Contributions are extremely welco
 
 For information on getting started, refer to the [CONTRIBUTING.md instructions](CONTRIBUTING.md).
 
-Continuous Integration builds can be installed from http://download.jboss.org/jbosstools/jdt.ls/staging/. Download the most recent `vscode-java-<version>.vsix` file and install it by following the instructions [here](https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix).
+Continuous Integration builds can be installed from http://download.jboss.org/jbosstools/jdt.ls/staging/. Download the most recent `java-<version>.vsix` file and install it by following the instructions [here](https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix).
 
 Feedback
 ===============
