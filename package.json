@@ -152,16 +152,8 @@
               },
               "startupClass": {
                 "type": "string",
-                "description": "startup class (Should be full qualified name e.g. org.eclipse.xxx.MainClass)",
+                "description": "Startup class (Should be full qualified name e.g. org.eclipse.xxx.MainClass)",
                 "default": ""
-              },
-              "classPath": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "default": [],
-                "description": "The classpath to be passed to jvm launcher."
               },
               "sourcePath": {
                 "type": "array",
@@ -170,6 +162,11 @@
                 },
                 "default": [],
                 "description": "The source folders of the project."
+              },
+              "projectName": {
+                "type": "string",
+                "description": "Name of the project that contains the startup class (Optional, only required if startupClass is contained in multiple projects)",
+                "default": ""
               },
               "stopOnEntry": {
                 "type": "boolean",
@@ -195,7 +192,6 @@
             "cwd": "${workspaceRoot}",
             "stopOnEntry": true,
             "startupClass": "",
-            "classPath": ["${workspaceRoot}"],
             "sourcePath": ["${workspaceRoot}"],
             "options": []
           }
