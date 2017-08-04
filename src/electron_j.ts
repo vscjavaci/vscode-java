@@ -1,21 +1,21 @@
 
 'use strict';
-var path = require('path');
-var os = require('os');
-var net = require('net');
-var cp = require('child_process');
+let path = require('path');
+let os = require('os');
+let net = require('net');
+let cp = require('child_process');
 
 function makeRandomHexString(length) {
-    var chars = ['0', '1', '2', '3', '4', '5', '6', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
-    var result = '';
-    for (var i = 0; i < length; i++) {
-        var idx = Math.floor(chars.length * Math.random());
+    let chars = ['0', '1', '2', '3', '4', '5', '6', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        let idx = Math.floor(chars.length * Math.random());
         result += chars[idx];
     }
     return result;
 }
 function generatePipeName() {
-    var randomName = 'vscode-' + makeRandomHexString(5);
+    let randomName = 'vscode-' + makeRandomHexString(5);
     if (process.platform === 'win32') {
         return '\\\\.\\pipe\\' + randomName + '-sock';
     }
@@ -24,8 +24,8 @@ function generatePipeName() {
 }
 function generatePatchedEnv(env, stdInPipeName, stdOutPipeName) {
     // Set the two unique pipe names and the electron flag as process env
-    var newEnv = {};
-    for (var key in env) {
+    let newEnv = {};
+    for (let key in env) {
         newEnv[key] = env[key];
     }
     newEnv['STDIN_PIPE_NAME'] = stdInPipeName;
@@ -33,15 +33,15 @@ function generatePatchedEnv(env, stdInPipeName, stdOutPipeName) {
     return newEnv;
 }
 function fork(modulePath, args, options, callback) {
-    var callbackCalled = false;
-    var resolve = function (result) {
+    let callbackCalled = false;
+    let resolve = function (result) {
         if (callbackCalled) {
             return;
         }
         callbackCalled = true;
         callback(null, result);
     };
-    var reject = function (err) {
+    let reject = function (err) {
         if (callbackCalled) {
             return;
         }
@@ -50,15 +50,15 @@ function fork(modulePath, args, options, callback) {
     };
 
     // Generate two unique pipe names
-    var stdInPipeName = generatePipeName();
-    var stdOutPipeName = generatePipeName();
+    let stdInPipeName = generatePipeName();
+    let stdOutPipeName = generatePipeName();
     
-    var newEnv = generatePatchedEnv(options.env || process.env, stdInPipeName, stdOutPipeName);
-    var childProcess;
+    let newEnv = generatePatchedEnv(options.env || process.env, stdInPipeName, stdOutPipeName);
+    let childProcess;
     let streamInfo = {writer : null,
                       reader: null} ;
     // Begin listening to stdout pipe
-    var serverOut = net.createServer(function (stream) {
+    let serverOut = net.createServer(function (stream) {
             streamInfo.writer = stream;
             if(streamInfo.reader !== null){
                 resolve(streamInfo);
@@ -66,7 +66,7 @@ function fork(modulePath, args, options, callback) {
     });
     
     serverOut.listen(stdOutPipeName);
-    var serverIn = net.createServer(function (stream) {
+    let serverIn = net.createServer(function (stream) {
             streamInfo.reader = stream;
             if(streamInfo.writer !== null ){
                 resolve(streamInfo);
@@ -75,8 +75,8 @@ function fork(modulePath, args, options, callback) {
     serverIn.listen(stdInPipeName);
 
 
-    var serverClosed = false;
-    var closeServer = function () {
+    let serverClosed = false;
+    let closeServer = function () {
         if (serverClosed) {
             return;
         }

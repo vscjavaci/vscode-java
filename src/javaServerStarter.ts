@@ -9,7 +9,7 @@ import * as net from 'net';
 import { Commands } from './commands';
 const glob = require('glob');
 
-declare var v8debug;
+declare let v8debug;
 const DEBUG = (typeof v8debug === 'object') || startedInDebugMode();
 let electron = require('./electron_j');
 

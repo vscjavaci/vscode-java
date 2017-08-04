@@ -2,7 +2,7 @@
 'use strict';
 
 import * as path from 'path';
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
 
 import { workspace, ExtensionContext, window, StatusBarAlignment, commands, ViewColumn, Uri, CancellationToken, TextDocumentContentProvider, TextEditor, WorkspaceConfiguration, languages, IndentAction, ProgressLocation, Progress } from 'vscode';
 import { LanguageClient, LanguageClientOptions, Position as LSPosition, Location as LSLocation } from 'vscode-languageclient';
@@ -108,7 +108,7 @@ export function activate(context: ExtensionContext) {
 								if (!config.startupClass) {
 									vscode.window.showErrorMessage('Please specify startupClass on launch.json firstly.');
 								} else {
-									const port = await languageClient.sendRequest(DebugSessionRequest.type, "vscode.java.debugsession");
+									const port = await languageClient.sendRequest(DebugSessionRequest.type, 'vscode.java.debugsession');
 									if (port) {
 										config.debugServer = port;
 										vscode.commands.executeCommand('vscode.startDebug', config);
