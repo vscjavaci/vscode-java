@@ -161,6 +161,11 @@
                 "description": "Startup class (Should be full qualified name e.g. org.eclipse.xxx.MainClass)",
                 "default": ""
               },
+              "classpath": {
+                "type": "string",
+                "default": "",
+                "description": "The classpath to be passed to jvm launcher (Optional, it would override the default classpath)"
+              },
               "sourcePath": {
                 "type": "array",
                 "items": {

@@ -8,7 +8,7 @@ import { workspace, ExtensionContext, window, StatusBarAlignment, commands, View
 import { LanguageClient, LanguageClientOptions, Position as LSPosition, Location as LSLocation } from 'vscode-languageclient';
 import { runServer, awaitServerConnection } from './javaServerStarter';
 import { Commands } from './commands';
-import { StatusNotification, ClassFileContentsRequest, ProjectConfigurationUpdateRequest, MessageType, ActionableNotification, FeatureStatus, ActionableMessage, DebugSessionRequest } from './protocol';
+import { StatusNotification, ClassFileContentsRequest, ProjectConfigurationUpdateRequest, MessageType, ActionableNotification, FeatureStatus, ActionableMessage, DebugSessionRequest, ClasspathResolveRequest, ClasspathResolveRequestParams } from './protocol';
 
 let os = require('os');
 let oldConfig;
@@ -108,6 +108,14 @@ export function activate(context: ExtensionContext) {
 								if (!config.startupClass) {
 									vscode.window.showErrorMessage('Please specify startupClass on launch.json firstly.');
 								} else {
+									if (!config.classpath) {
+										const params: ClasspathResolveRequestParams = {
+											startupClass: config.startupClass,
+											projectName: config.projectName,
+										};
+										const classpath = await languageClient.sendRequest(ClasspathResolveRequest.type, params);
+										config.classpath = classpath;
+									}
 									const port = await languageClient.sendRequest(DebugSessionRequest.type, 'vscode.java.debugsession');
 									if (port) {
 										config.debugServer = port;
