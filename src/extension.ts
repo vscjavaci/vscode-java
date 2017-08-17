@@ -80,10 +80,11 @@ export function activate(context: ExtensionContext) {
 								lastStatus = item.text;
 								resolve();
 								commands.registerCommand(Commands.START_DEBUG_SESSION, async (config) => {
-									if (!config.startupClass) {
-										vscode.window.showErrorMessage('Please specify startupClass on launch.json firstly.');
-									} else {
-										if (!config.classpath) {
+									if (config.request === 'launch') {
+										if (!config.startupClass) {
+											vscode.window.showErrorMessage('Please specify startupClass in launch.json first.');
+											return;
+										} else if (!config.classpath) {
 											const params: ClasspathResolveRequestParams = {
 												startupClass: config.startupClass,
 												projectName: config.projectName,
@@ -91,11 +92,16 @@ export function activate(context: ExtensionContext) {
 											const classpath = await languageClient.sendRequest(ClasspathResolveRequest.type, params);
 											config.classpath = classpath;
 										}
-										const port = await languageClient.sendRequest(DebugSessionRequest.type, 'vscode.java.debugsession');
-										if (port) {
-											config.debugServer = port;
-											vscode.commands.executeCommand('vscode.startDebug', config);
+									} else if (config.request === 'attach') {
+										if (!config.hostName || !config.port || !config.attachTimeout) {
+											vscode.window.showErrorMessage('Please specify hostName/port/attachTimeout in launch.json first.');
+											return;
 										}
+									}
+									const port = await languageClient.sendRequest(DebugSessionRequest.type, 'vscode.java.debugsession');
+									if (port) {
+										config.debugServer = port;
+										vscode.commands.executeCommand('vscode.startDebug', config);
 									}
 								});
 								break;

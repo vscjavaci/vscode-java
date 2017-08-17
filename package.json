@@ -193,6 +193,48 @@
                 "description": "Options to be passed to the java executable (java)."
               }
             }
+          },
+          "attach": {
+            "required": [
+              "cwd",
+              "hostName",
+              "port",
+              "attachTimeout"
+            ],
+            "properties": {
+              "cwd": {
+                "type": "string",
+                "description": "Current working directory (Defaults to workspace root directory).",
+                "default": "${workspaceRoot}"
+              },
+              "hostName": {
+                "type": "string",
+                "default": "localhost",
+                "description": "The machine where the debuggee VM was launched on"
+              },
+              "port": {
+                "type": "number",
+                "description": "The debug port that the debuggee VM exposed"
+              },
+              "attachTimeout": {
+                "type": "number",
+                "default": 30000,
+                "description": "The timeout when attaching to the debuggee VM"
+              },
+              "sourcePath": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "description": "The source folders of the project."
+              },
+              "projectName": {
+                "type": "string",
+                "description": "Name of the project that contains the startup class (Optional, only required if startupClass is contained in multiple projects)",
+                "default": ""
+              }
+            }
           }
         },
         "initialConfigurations": [
@@ -205,6 +247,16 @@
             "startupClass": "",
             "sourcePath": ["${workspaceRoot}"],
             "options": []
+          },
+          {
+            "type": "java",
+            "name": "Java Debug (Attach)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 0,
+            "attachTimeout": 30000,
+            "cwd": "${workspaceRoot}",
+            "sourcePath": ["${workspaceRoot}"]
           }
         ]
       }
