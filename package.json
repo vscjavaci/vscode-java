@@ -138,7 +138,7 @@
     "debuggers": [
       {
         "type": "java",
-        "label": "Java Debug",
+        "label": "Java",
         "startSessionCommand": "java.debug.startSession",
         "enableBreakpointsFor": {
           "languageIds": [
@@ -148,91 +148,78 @@
         "configurationAttributes": {
           "launch": {
             "required": [
-              "cwd",
-              "startupClass"
+              "mainClass"
             ],
             "properties": {
-              "cwd": {
-                "type": "string",
-                "description": "Current working directory (Defaults to workspace root directory).",
-                "default": "${workspaceRoot}"
-              },
-              "startupClass": {
-                "type": "string",
-                "description": "Startup class (Should be full qualified name e.g. org.eclipse.xxx.MainClass)",
-                "default": ""
-              },
-              "classpath": {
-                "type": "string",
-                "default": "",
-                "description": "The classpath to be passed to jvm launcher (Optional, it would override the default classpath)"
-              },
-              "sourcePath": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "default": [],
-                "description": "The source folders of the project."
-              },
               "projectName": {
                 "type": "string",
-                "description": "Name of the project that contains the startup class (Optional, only required if startupClass is contained in multiple projects)",
+                "description": "Name of the project that contains the main class (optional, only required when the main class resides in multiple projects).",
                 "default": ""
               },
-              "stopOnEntry": {
-                "type": "boolean",
-                "description": "Automatically stop after launch.",
-                "default": true
+              "mainClass": {
+                "type": "string",
+                "description": "The main class of the program (fully qualified name, e.g. com.xyz.MainClass).",
+                "default": ""
               },
-              "options": {
+              "args": {
+                "type": "string",
+                "description": "The command line arguments passed to the program.",
+                "default": ""
+              },
+              "vmArgs": {
+                "type": "string",
+                "description": "The java options and system properties passed to the JVM launcher (e.g. -Xms<size> -Xmx<size> -D<name>=<value>).",
+                "default": ""
+              },
+              "classPaths": {
                 "type": "array",
                 "items": {
                   "type": "string"
                 },
-                "default": [],
-                "description": "Options to be passed to the java executable (java)."
+                "description": "The classpaths passed to the JVM launcher (if not specified, debugger will resolve them automatically from the project configuration).",
+                "default": []
+              },
+              "sourcePaths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "The source directories of the program.",
+                "default": []
               }
             }
           },
           "attach": {
             "required": [
-              "cwd",
               "hostName",
-              "port",
-              "attachTimeout"
+              "port"
             ],
             "properties": {
-              "cwd": {
-                "type": "string",
-                "description": "Current working directory (Defaults to workspace root directory).",
-                "default": "${workspaceRoot}"
-              },
               "hostName": {
                 "type": "string",
                 "default": "localhost",
-                "description": "The machine where the debuggee VM was launched on"
+                "description": "The host name or ip address of remote debuggee."
               },
               "port": {
                 "type": "number",
-                "description": "The debug port that the debuggee VM exposed"
+                "description": "The debug port of remote debuggee."
               },
-              "attachTimeout": {
+              "timeout": {
                 "type": "number",
                 "default": 30000,
-                "description": "The timeout when attaching to the debuggee VM"
+                "description": "Timeout value before reconnecting, in milliseconds (default to 30000ms)."
               },
-              "sourcePath": {
+              "sourcePaths": {
                 "type": "array",
                 "items": {
                   "type": "string"
                 },
                 "default": [],
-                "description": "The source folders of the project."
+                "description": "The source directories of the program."
               },
               "projectName": {
                 "type": "string",
-                "description": "Name of the project that contains the startup class (Optional, only required if startupClass is contained in multiple projects)",
+                "description": "Name of the project that contains the main class (optional, only required when the main class resides in multiple projects).",
                 "default": ""
               }
             }
@@ -241,23 +228,24 @@
         "initialConfigurations": [
           {
             "type": "java",
-            "name": "Java Debug",
+            "name": "Debug (Launch)",
             "request": "launch",
-            "cwd": "${workspaceRoot}",
-            "stopOnEntry": true,
-            "startupClass": "",
-            "sourcePath": ["${workspaceRoot}"],
-            "options": []
+            "mainClass": "",
+            "args": "",
+            "sourcePaths": [
+              "${workspaceRoot}"
+            ]
           },
           {
             "type": "java",
-            "name": "Java Debug (Attach)",
+            "name": "Debug (Attach)",
             "request": "attach",
             "hostName": "localhost",
             "port": 0,
-            "attachTimeout": 30000,
-            "cwd": "${workspaceRoot}",
-            "sourcePath": ["${workspaceRoot}"]
+            "timeout": 30000,
+            "sourcePaths": [
+              "${workspaceRoot}"
+            ]
           }
         ]
       }

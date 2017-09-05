@@ -81,26 +81,29 @@ export function activate(context: ExtensionContext) {
 								resolve();
 								commands.registerCommand(Commands.START_DEBUG_SESSION, async (config) => {
 									if (config.request === 'launch') {
-										if (!config.startupClass) {
-											vscode.window.showErrorMessage('Please specify startupClass in launch.json first.');
+										if (!config.mainClass) {
+											vscode.window.showErrorMessage('Please specify the main class in launch.json.');
 											return;
-										} else if (!config.classpath) {
+										} else if (!config.classPaths || !Array.isArray(config.classPaths) || !config.classPaths.length) {
 											const params: ClasspathResolveRequestParams = {
-												startupClass: config.startupClass,
+												mainClass: config.mainClass,
 												projectName: config.projectName,
 											};
-											const classpath = await languageClient.sendRequest(ClasspathResolveRequest.type, params);
-											config.classpath = classpath;
+											config.classPaths = await languageClient.sendRequest(ClasspathResolveRequest.type, params);
+										}
+										if (!config.classPaths || !Array.isArray(config.classPaths) || !config.classPaths.length) {
+											vscode.window.showErrorMessage('Cannot resolve the classpaths automatically, please specify it in launch.json.');
+											return;
 										}
 									} else if (config.request === 'attach') {
-										if (!config.hostName || !config.port || !config.attachTimeout) {
-											vscode.window.showErrorMessage('Please specify hostName/port/attachTimeout in launch.json first.');
+										if (!config.hostName || !config.port) {
+											vscode.window.showErrorMessage('Please specify the host name and the port of the remote debuggee in launch.json.');
 											return;
 										}
 									}
-									const port = await languageClient.sendRequest(DebugSessionRequest.type, 'vscode.java.debugsession');
-									if (port) {
-										config.debugServer = port;
+									const debugServerPort = await languageClient.sendRequest(DebugSessionRequest.type, 'vscode.java.debugsession');
+									if (debugServerPort) {
+										config.debugServer = debugServerPort;
 										vscode.commands.executeCommand('vscode.startDebug', config);
 									}
 								});
